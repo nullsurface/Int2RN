@@ -3,9 +3,11 @@
 char numerals[] = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
 
 int num_digits(int);
-int add_numerals(int, char*, int, int*);
+int add_1_3(int, char*, int, int*);
+int add_5_8(int, char*, int, int*);
+
 int main () {
-    int num = 5; 
+    int num = 23; 
     int digits = num_digits(num);
     char* roman = (char*)malloc(sizeof(char) * 10);
     printf("%d\n", digits);
@@ -19,20 +21,13 @@ int main () {
         switch (curr_digit) {
             case 1 ... 3:
                 printf("%d case 1 ... 3\n", i);
-                switch (i) {
-                    case 0:
-                        add_numerals(curr_digit, roman, i, &last_pos);
-                        break;
-                    case 1 ... 3:
-                        add_numerals(curr_digit, roman, i, &last_pos); // need to fix tmr
-                        break;
-                }
+                add_1_3(curr_digit, roman, i, &last_pos);
                 break;
             case 4:
                 break;
             case 5 ... 8:
                 printf("Case 5 ... 8:\n");
-                add_numerals(curr_digit, roman, i+1, &last_pos);
+                add_5_8(curr_digit, roman, i, &last_pos);
                 break;
             case 9:
                 break;
@@ -41,7 +36,9 @@ int main () {
     }
     
     roman[last_pos] = '\0';
-    printf("%s/n", roman);
+    for (int i = last_pos-1; i >=0; i--) {
+        printf("%c", roman[i]);
+    }
 
     return 0;
 }
@@ -53,10 +50,18 @@ int num_digits(int num) {
         return 1;
 }
 
-int add_numerals(int curr_digit, char* roman, int i, int* last_pos) {
+// Generates roman numerals I,II,III
+int add_1_3(int curr_digit, char* roman, int i, int* last_pos) {
     printf("%d %c\n", curr_digit, roman[i+2]);
     for (int count = 0; count < curr_digit; count++) {
         roman[*last_pos] = (char)numerals[i * 2];
         *last_pos = *last_pos + 1;
     }
+}
+
+// Generates roman numerals V, VI, VII, III
+int add_5_8(int curr_digit, char* roman, int i, int* last_pos) {
+    roman[*last_pos] = numerals[i * 2 + 1]; 
+    *last_pos = *last_pos + 1;
+    add_1_3(curr_digit - 5, roman, 0, last_pos);
 }
