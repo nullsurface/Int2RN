@@ -6,14 +6,15 @@ int num_digits(int);
 int add_1_3(int, char*, int, int*);
 int add_5_8(int, char*, int, int*);
 
-int main () {
-    int num = 23; 
+int main (int argc, char *argv[]) {
+    char *a = argv[1];
+    int num = atoi(a); 
     int digits = num_digits(num);
     char* roman = (char*)malloc(sizeof(char) * 10);
     printf("%d\n", digits);
     int curr_digit;
     int last_pos = 0;
-    
+     
     for (int i = 0; i < digits; i++) {
         curr_digit = num % 10;
         num /= 10;
@@ -36,9 +37,7 @@ int main () {
     }
     
     roman[last_pos] = '\0';
-    for (int i = last_pos-1; i >=0; i--) {
-        printf("%c", roman[i]);
-    }
+    printf("%s", roman);
 
     return 0;
 }
