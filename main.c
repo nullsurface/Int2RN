@@ -5,6 +5,7 @@ char numerals[] = {'I', 'V', 'X', 'L', 'C', 'D', 'M'};
 int num_digits(int);
 int add_1_3(int, char*, int, int*);
 int add_5_8(int, char*, int, int*);
+int add_4(int, char*, int, int*);
 
 int main (int argc, char *argv[]) {
     char *a = argv[1];
@@ -25,6 +26,7 @@ int main (int argc, char *argv[]) {
                 add_1_3(curr_digit, roman, i, &last_pos);
                 break;
             case 4:
+                add_4(curr_digit, roman, i, &last_pos);
                 break;
             case 5 ... 8:
                 printf("Case 5 ... 8:\n");
@@ -37,8 +39,12 @@ int main (int argc, char *argv[]) {
     }
     
     roman[last_pos] = '\0';
-    printf("%s", roman);
+    for (int i = last_pos; i >= 0; i--) {
+        printf("%c", roman[i]); 
+    }
 
+    free(roman);
+    
     return 0;
 }
 
@@ -60,7 +66,15 @@ int add_1_3(int curr_digit, char* roman, int i, int* last_pos) {
 
 // Generates roman numerals V, VI, VII, III
 int add_5_8(int curr_digit, char* roman, int i, int* last_pos) {
+    add_1_3(curr_digit - 5, roman, i, last_pos);
     roman[*last_pos] = numerals[i * 2 + 1]; 
     *last_pos = *last_pos + 1;
-    add_1_3(curr_digit - 5, roman, 0, last_pos);
+}
+
+// Generates roman numerals IV, XL, ect.
+int add_4(int curr_digit, char* roman, int i, int* last_pos) {
+    roman[*last_pos] = numerals[i * 2 + 1];
+    *last_pos = *last_pos + 1;
+    roman[*last_pos] = numerals[i * 2]; 
+    *last_pos = *last_pos + 1;
 }
